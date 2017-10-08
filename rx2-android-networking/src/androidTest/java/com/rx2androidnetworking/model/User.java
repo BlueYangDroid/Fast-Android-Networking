@@ -17,32 +17,15 @@
  *
  */
 
-apply plugin: 'com.android.library'
+package com.rx2androidnetworking.model;
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+/**
+ * Created by amitshekhar on 26/04/17.
+ */
 
-    defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+public class User {
+
+    public String firstName;
+    public String lastName;
+
 }
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.2'
-    compile project(':android-networking')
-}
-
-//apply from: 'jackson-upload.gradle'
