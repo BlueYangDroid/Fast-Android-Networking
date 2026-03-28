@@ -37,7 +37,6 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.google.gson.reflect.TypeToken;
 import com.networking.model.User;
 import com.networking.utils.Utils;
 
@@ -434,9 +433,11 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void uploadImage(final View view) {
+        final String key = "image";
+        final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png");
         AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
                 .setPriority(Priority.MEDIUM)
-                .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
+                .addMultipartFile(key, file)
                 .setTag(this)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -1013,8 +1014,7 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
                         });
-                ANResponse<List<User>> responseTwo = requestTwo.executeForParsed(new TypeToken<List<User>>() {
-                });
+                ANResponse<List<User>> responseTwo = requestTwo.executeForObjectList(User.class);
 
                 if (responseTwo.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : response success");
@@ -1107,6 +1107,22 @@ public class ApiTestActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    public void checkOptionsRequest(View view) {
+        AndroidNetworking.options("https://api.github.com/square/okhttp/issues")
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        Log.d(TAG, "response : " + response.headers().toString());
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
     }
 
     public void getCurrentConnectionQuality(View view) {
